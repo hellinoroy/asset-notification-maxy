@@ -14,10 +14,10 @@ return new class extends Migration
     {
         Schema::create('histori', function (Blueprint $table) {
             $table->id('histori_id');
-            $table->foreignId('user_id')
+            $table->foreignId('id')
                 ->nullable()
                 ->constrained('users')
-                ->nullOnDelete();
+                ->onDelete('set null');
             $table->date('histori_tanggal');
             $table->string('histori_keterangan');
             $table->timestamps();

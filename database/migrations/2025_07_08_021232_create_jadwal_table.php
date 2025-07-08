@@ -13,13 +13,19 @@ return new class extends Migration
     {
         Schema::create('jadwal', function (Blueprint $table) {
             $table->id('jadwal_id');
-            $table->foreignId('id')     
+            $table->unsignedBigInteger('aset_id');
+            $table->foreignId('id')
                 ->constrained('users')
                 ->onDelete('cascade');
             $table->date('jadwal_tanggal');
+            $table->string('jadwal_keterangan')->nullable();
+            $table->string('jadwal_status');
             $table->timestamps();
 
-            
+            $table->foreign('aset_id')
+                ->references('aset_id')
+                ->on('aset')
+                ->onDelete('cascade');
         });
     }
 

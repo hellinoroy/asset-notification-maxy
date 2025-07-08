@@ -11,7 +11,6 @@ class Histori extends Model
     public $incrementing = true;
     protected $keyType = 'int';
 
-
     protected $fillable = [
         'id',
         'histori_tanggal',

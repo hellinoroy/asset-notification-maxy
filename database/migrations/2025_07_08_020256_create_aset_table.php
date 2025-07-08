@@ -13,10 +13,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('aset', function (Blueprint $table) {
-            $table->string('aset_id')->primary();
+            $table->id('aset_id');
+            $table->string('aset_nomor')->unique();
             $table->string('aset_nama');
             $table->string('aset_tahun_beli');
-            $table->string('aset_keterangan');
+            $table->string('aset_keterangan')->nullable();
 
         });
     }

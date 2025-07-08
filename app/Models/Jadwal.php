@@ -12,10 +12,11 @@ class Jadwal extends Model
     protected $keyType = 'int';
 
     protected $fillable = [
-        'jadwal_id',
         'id',
-        'aset_tahun_beli',
-        'aset_keterangan',
+        'aset_id',
+        'jadwal_tanggal',
+        'jadwal_status',
+        'jadwal_keterangan',
     ];
 
     public function user()
@@ -23,8 +24,8 @@ class Jadwal extends Model
         return $this->belongsTo(User::class, 'id', 'id');
     }
 
-    public function asetJadwal()
+    public function aset()
     {
-        return $this->hasMany(AsetJadwal::class, 'jadwal_id', 'jadwal_id');
+        return $this->belongsTo(Aset::class, 'aset_id', 'aset_id');
     }
 }
