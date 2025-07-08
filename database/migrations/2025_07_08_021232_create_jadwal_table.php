@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
+class CreateJadwalTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,25 @@ return new class extends Migration
     {
         Schema::create('jadwal', function (Blueprint $table) {
             $table->id('jadwal_id');
+
             $table->unsignedBigInteger('aset_id');
-            $table->foreignId('id')
-                ->constrained('users')
-                ->onDelete('cascade');
+            $table->unsignedBigInteger('user_id'); // foreign key ke tabel users
+
             $table->date('jadwal_tanggal');
             $table->string('jadwal_keterangan')->nullable();
             $table->string('jadwal_status');
             $table->timestamps();
 
+            // Relasi ke tabel aset
             $table->foreign('aset_id')
                 ->references('aset_id')
                 ->on('aset')
+                ->onDelete('cascade');
+
+            // Relasi ke tabel users
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
                 ->onDelete('cascade');
         });
     }
@@ -36,4 +43,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('jadwal');
     }
-};
+}
