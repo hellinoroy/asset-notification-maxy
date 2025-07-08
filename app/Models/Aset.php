@@ -8,19 +8,20 @@ class Aset extends Model
 {
     protected $table = 'aset';
     protected $primaryKey = 'aset_id';
-    public $incrementing = false;
-    protected $keyType = 'string';
+    public $incrementing = true;
+    protected $keyType = 'int';
     public $timestamps = false;
 
     protected $fillable = [
+        'aset_nomor',
         'aset_nama',
         'aset_tahun_beli',
         'aset_keterangan',
     ];
 
-    public function asetJadwal()
+    public function aset()
     {
-        return $this->hasMany(AsetJadwal::class, 'aset_id', 'aset_id');
+        return $this->hasMany(Jadwal::class, 'aset_id', 'aset_id');
     }
 
     public function asetHistori()

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('aset_histori', function (Blueprint $table) {
             $table->id('aset_histori_id');
             $table->unsignedBigInteger('histori_id');
-            $table->string('aset_id');
+            $table->unsignedBigInteger('aset_id');
 
             $table->foreign('histori_id')
                 ->references('histori_id')
