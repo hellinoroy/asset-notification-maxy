@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateJadwalTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,7 @@ class CreateJadwalTable extends Migration
             $table->id('jadwal_id');
 
             $table->unsignedBigInteger('aset_id');
-            $table->unsignedBigInteger('user_id'); // foreign key ke tabel users
+            $table->unsignedBigInteger('id'); 
 
             $table->date('jadwal_tanggal');
             $table->string('jadwal_keterangan')->nullable();
@@ -29,7 +29,7 @@ class CreateJadwalTable extends Migration
                 ->onDelete('cascade');
 
             // Relasi ke tabel users
-            $table->foreign('user_id')
+            $table->foreign('id')
                 ->references('id')
                 ->on('users')
                 ->onDelete('cascade');
