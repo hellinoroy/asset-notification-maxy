@@ -47,4 +47,11 @@ class User extends Authenticatable implements MustVerifyEmail
             'password' => 'hashed',
         ];
     }
+
+    public static function adminList()
+    {
+        return self::select(['name', 'email', 'role'])
+                    ->where('role', 'Admin')
+                    ->get();
+    }
 }
