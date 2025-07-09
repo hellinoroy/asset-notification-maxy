@@ -36,9 +36,21 @@ class JadwalController extends Controller
                 'id'                        => 'required|exists:users,id',
                 'jadwal_tanggal'            => 'required|date',
                 'jadwal_keterangan'         => 'string',
-                'jadwal_status'             => 'string'
             ]);
             // Log::info($validated);
+
+            $date = Carbon::today();
+            $jadwalDate = Carbon::parse($validated['jadwal_tanggal']);
+
+            if ($jadwalDate->lt($date)) {
+                return response()->json(['message' => 'Jadwal tidak boleh kurang dari hari ini'], 400);
+            }
+            
+            if ($date == $jadwalDate) {
+                $validated['jadwal_status'] = 'Pending';
+            } else {
+                $validated['jadwal_status'] = 'Aman';
+            }
 
             $jadwal = Jadwal::create($validated);
 

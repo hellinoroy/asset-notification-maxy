@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class Jadwal extends Model
 {
@@ -28,4 +30,29 @@ class Jadwal extends Model
     {
         return $this->belongsTo(Aset::class, 'aset_id', 'aset_id');
     }
+
+    public static function notification()
+    {
+        return self::with([
+            'aset',
+            'user' => function ($q) {
+                $q->select(['id', 'name', 'email']);
+            }
+        ])
+            ->whereIn('jadwal_status', ['Pending', 'Terlambat'])
+            ->get();
+    }
+
+    public static function statusUpdate()
+    {
+        $date = Carbon::today();
+        self::where('jadwal_tanggal', $date)
+            ->update(['jadwal_status' => 'Pending']);
+        self::where('jadwal_tanggal', '<', $date)
+            ->where('jadwal_status', '!=', 'Selesai')
+            ->update(['jadwal_status' => 'Terlambat']);
+       
+    }
+
+
 }
