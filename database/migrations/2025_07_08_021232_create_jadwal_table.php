@@ -13,18 +13,25 @@ return new class extends Migration
     {
         Schema::create('jadwal', function (Blueprint $table) {
             $table->id('jadwal_id');
+
             $table->unsignedBigInteger('aset_id');
-            $table->foreignId('id')
-                ->constrained('users')
-                ->onDelete('cascade');
+            $table->unsignedBigInteger('id'); 
+
             $table->date('jadwal_tanggal');
             $table->string('jadwal_keterangan')->nullable();
             $table->string('jadwal_status');
             $table->timestamps();
 
+            // Relasi ke tabel aset
             $table->foreign('aset_id')
                 ->references('aset_id')
                 ->on('aset')
+                ->onDelete('cascade');
+
+            // Relasi ke tabel users
+            $table->foreign('id')
+                ->references('id')
+                ->on('users')
                 ->onDelete('cascade');
         });
     }
@@ -36,4 +43,4 @@ return new class extends Migration
     {
         Schema::dropIfExists('jadwal');
     }
-};
+}
