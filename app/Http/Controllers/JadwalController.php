@@ -15,8 +15,13 @@ class JadwalController extends Controller
     public function index()
     {
         try {
-            $query = Jadwal::with(['aset'])
-                ->get();
+            $query = Jadwal::with([
+                'aset' => function ($q) {
+                    $q->select(['aset_id', 'aset_nomor', 'aset_nama'])
+                        ->with(['asetHistori.latestHistori']);
+                },
+                'user'
+            ])->get();
             return response()->json(['data' => $query], 200);
         } catch (\Exception $e) {
             return response()->json([
@@ -45,7 +50,7 @@ class JadwalController extends Controller
             if ($jadwalDate->lt($date)) {
                 return response()->json(['message' => 'Jadwal tidak boleh kurang dari hari ini'], 400);
             }
-            
+
             if ($date == $jadwalDate) {
                 $validated['jadwal_status'] = 'Pending';
             } else {

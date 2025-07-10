@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -9,7 +10,10 @@ use Inertia\Inertia;
 // })->name('home');
 
 Route::get('/', function () {
-    return Inertia::render('auth/login'); // Render the Login component
+    if (Auth::check()) {
+        return redirect()->route('dashboard');
+    }
+    return Inertia::render('auth/login');
 })->name('login_redirect');
 
 
@@ -22,6 +26,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
             ],
         ]);
     })->name('dashboard');
+
+    Route::get('/jadwal', function () {
+        return Inertia::render('jadwal');
+    })->name('jadwal_view');
 });
 
 

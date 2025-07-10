@@ -43,6 +43,8 @@ class Jadwal extends Model
             ->get();
     }
 
+    
+
     public static function statusUpdate()
     {
         $date = Carbon::today();

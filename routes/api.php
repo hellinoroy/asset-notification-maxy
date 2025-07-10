@@ -7,16 +7,48 @@ use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\HistoriController;
 use Illuminate\Support\Facades\Log;
 
+
+use Illuminate\Support\Facades\Auth;
+use App\Models\Jadwal;
+use App\Models\User;
+use App\Notifications\JadwalReminder;
+
+
+
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
+Route::middleware(['auth'])->get('/notification', function () {
+    $user = Auth::user();
 
-// Route::middleware(['auth:sanctum', 'role:Admin'])->group(function () {
-//     Route::get('/admin/dashboard', function () {
-//         return response()->json(['message' => 'Welcome admin']);
-//     });
-// });
+    if (!$user) {
+        return response()->json(['error' => 'Not authenticated'], 401);
+    }
+
+    $notifications = $user->unreadNotifications()
+        ->where('type', \App\Notifications\JadwalReminder::class)
+        ->get();
+
+    return response()->json([
+        'message' => 'Jadwal notifications fetched successfully.',
+        'notifications' => $notifications,
+    ]);
+});
+
+Route::middleware(['auth'])->post('/notification/{id}/read', function ($id) {
+    $notification = Auth::user()->unreadNotifications()->find($id);
+
+    if ($notification) {
+        $notification->markAsRead();
+        return response()->json(['message' => 'Notification marked as read.']);
+    }
+
+    return response()->json(['message' => 'Notification not found or already read.'], 404);
+});
+
+
+
 
 // Route::middleware(['role:Admin'])->group(function () {
 
