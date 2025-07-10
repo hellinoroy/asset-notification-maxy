@@ -5,7 +5,7 @@ import RegisterPage from './pages/RegisterPage';
 import JadwalPage from './pages/JadwalPage';
 import EditJadwalPage from './pages/EditJadwalPage';
 import AdminLayout from './layouts/AdminLayout';
-import INITIAL_SCHEDULE_DATA from './data/scheduleData';
+import INITIAL_SCHEDULE_DATA from './data/scheduledata';
 
 // Tipe untuk satu entri jadwal
 export interface ScheduleItem {

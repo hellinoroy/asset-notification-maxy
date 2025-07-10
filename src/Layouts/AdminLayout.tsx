@@ -1,10 +1,11 @@
 import React from 'react';
-import { Outlet, useLocation } from 'react-router-dom'; // Import Outlet dan useLocation dari react-router-dom
+import { Outlet, useLocation } from 'react-router-dom'; // Outlet untuk nested routing
+
 import Sidebar from '../components/Sidebar';
 import Topbar from '../components/Topbar';
 
-const AdminLayout = () => {
-  const location = useLocation(); // Untuk menentukan menu aktif
+const AdminLayout: React.FC = () => {
+  const location = useLocation();
 
   return (
     <div className="flex h-screen bg-gray-100">
@@ -17,8 +18,8 @@ const AdminLayout = () => {
         <Topbar />
 
         {/* Page Content */}
-        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-10 p-6"> 
-          <Outlet /> {/* Di sini halaman seperti SchedulePage akan dirender */}
+        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-10 p-6">
+          <Outlet />
         </main>
       </div>
     </div>

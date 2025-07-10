@@ -1,14 +1,20 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
-import { BrowserRouter } from 'react-router-dom' // Pastikan ini diimpor dengan huruf 'B' kapital
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import './index.css';
+import App from './App';
+import { BrowserRouter } from 'react-router-dom';
 
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    {/* Perbaiki ini: Gunakan BrowserRouter dengan huruf kapital 'B' */}
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </StrictMode>,
-)
+const rootElement = document.getElementById('root');
+
+if (rootElement) {
+  const root = createRoot(rootElement);
+  root.render(
+    <StrictMode>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </StrictMode>
+  );
+} else {
+  console.error('Root element not found');
+}

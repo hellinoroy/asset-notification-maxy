@@ -1,12 +1,22 @@
-// src/data/scheduleData.js
+// src/data/scheduleData.ts
 
-const INITIAL_SCHEDULE_DATA = [
+export interface ScheduleItem {
+  id: string;
+  namaAset: string;
+  lastMaintenance: string;
+  nextMaintenance: string;
+  keterangan: string;
+  pic: string;
+  status: 'Pending' | 'Terlambat' | 'Selesai' | 'Aman' | string;
+  yn: boolean;
+}
+
+const INITIAL_SCHEDULE_DATA: ScheduleItem[] = [
   { id: 'MBL01', namaAset: 'Mobil Honda HRV', lastMaintenance: '2024-11-23', nextMaintenance: '2025-04-25', keterangan: 'Ganti oli', pic: 'Budi', status: 'Pending', yn: true },
   { id: 'PRN01', namaAset: 'Printer Epson L3250', lastMaintenance: '-', nextMaintenance: '2025-11-25', keterangan: 'Servis mesin', pic: 'Doni', status: 'Pending', yn: false },
   { id: 'AC01', namaAset: 'AC Split Panasonic 1PK', lastMaintenance: '2024-06-01', nextMaintenance: '2024-12-27', keterangan: 'Pending serv...', pic: 'Nina', status: 'Terlambat', yn: true },
   { id: 'GEN01', namaAset: 'Genset 5000 Watt', lastMaintenance: '2025-07-12', nextMaintenance: '2025-07-12', keterangan: 'Maintenance b...', pic: 'Riko', status: 'Pending', yn: false },
   { id: 'TRK01', namaAset: 'Truk Pengangkut', lastMaintenance: '2024-01-12', nextMaintenance: '2024-07-25', keterangan: 'Ganti ban dan...', pic: 'Budi', status: 'Selesai', yn: true },
-  // Tambahkan lebih banyak data di bawah ini untuk menguji paginasi
   { id: 'PRJ01', namaAset: 'Proyektor Epson X122', lastMaintenance: '-', nextMaintenance: '2024-05-08', keterangan: 'Ganti kabel', pic: 'Agus', status: 'Aman', yn: true },
   { id: 'CMR01', namaAset: 'CCTV Indoor Hikvision', lastMaintenance: '2024-07-23', nextMaintenance: '2024-07-23', keterangan: 'Perbaikan ker...', pic: 'Sinta', status: 'Aman', yn: true },
   { id: 'KMR01', namaAset: 'Kamera Canon EOS M50', lastMaintenance: '-', nextMaintenance: '2024-07-03', keterangan: 'Ganti lensa b...', pic: 'Doni', status: 'Aman', yn: true },
