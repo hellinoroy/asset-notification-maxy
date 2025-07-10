@@ -1,8 +1,21 @@
 import React from 'react';
 
-// Menerima currentItems dari props (onToggleYn dihapus karena checkbox dihilangkan)
-const ScheduleTable = ({ currentItems = [] }) => {
-  const getStatusClasses = (status) => {
+interface ScheduleItem {
+  id: string | number;
+  namaAset: string;
+  lastMaintenance: string;
+  nextMaintenance: string;
+  keterangan: string;
+  pic: string;
+  status: 'Pending' | 'Terlambat' | 'Selesai' | 'Aman' | string; // string tambahan untuk fleksibilitas
+}
+
+interface ScheduleTableProps {
+  currentItems: ScheduleItem[];
+}
+
+const ScheduleTable: React.FC<ScheduleTableProps> = ({ currentItems = [] }) => {
+  const getStatusClasses = (status: string): string => {
     switch (status) {
       case 'Pending':
         return 'bg-yellow-100 text-yellow-800';
@@ -29,7 +42,6 @@ const ScheduleTable = ({ currentItems = [] }) => {
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Keterangan</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">PIC</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-         
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
@@ -46,7 +58,6 @@ const ScheduleTable = ({ currentItems = [] }) => {
                   {item.status}
                 </span>
               </td>
-         
             </tr>
           ))}
         </tbody>

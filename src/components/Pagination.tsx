@@ -1,11 +1,16 @@
 import React from 'react';
 
-const Pagination = ({ currentPage, totalPages, onPageChange }) => {
-  const maxPageButtons = 5; // Batas jumlah tombol halaman yang terlihat
+interface PaginationProps {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+}
 
-  // Fungsi untuk menghasilkan tombol paginasi dengan ellipsis
-  const getPaginationButtons = () => {
-    const buttons = [];
+const Pagination: React.FC<PaginationProps> = ({ currentPage, totalPages, onPageChange }) => {
+  const maxPageButtons = 5;
+
+  const getPaginationButtons = (): (number | string)[] => {
+    const buttons: (number | string)[] = [];
     let startPage = Math.max(1, currentPage - Math.floor(maxPageButtons / 2));
     let endPage = Math.min(totalPages, startPage + maxPageButtons - 1);
 
@@ -34,9 +39,6 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
     return buttons;
   };
 
-  // ✅ Menghapus kondisi 'if (totalPages <= 1) { return null; }'
-  // Ini memastikan paginasi selalu dirender, bahkan untuk satu halaman.
-
   return (
     <div className="flex justify-center mt-4">
       <nav className="relative z-0 inline-flex rounded-md shadow-sm -space-x-px" aria-label="Pagination">
@@ -53,12 +55,15 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
 
         {getPaginationButtons().map((item, index) =>
           item === '...' ? (
-            <span key={index} className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700">
+            <span
+              key={`ellipsis-${index}`}
+              className="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700"
+            >
               ...
             </span>
           ) : (
             <button
-              key={item}
+              key={`page-${item}`}
               onClick={() => onPageChange(item)}
               className={`relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium
                 ${currentPage === item ? 'z-10 bg-blue-50 border-blue-500 text-blue-600' : 'text-gray-700 hover:bg-gray-50'}`}

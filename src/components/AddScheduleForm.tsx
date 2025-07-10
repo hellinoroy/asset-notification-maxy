@@ -2,13 +2,29 @@ import React, { useState } from 'react';
 import InputField from './InputField';
 import PrimaryButton from './PrimaryButton';
 
-// Menerima prop 'onAddSchedule' dari parent
-const AddScheduleForm = ({ onAddSchedule }) => {
-  const [id, setId] = useState('');
-  const [assetName, setAssetName] = useState('');
-  const [nextMaintenanceDate, setNextMaintenanceDate] = useState('');
-  const [keterangan, setKeterangan] = useState('');
-  const [pic, setPic] = useState('');
+// Tipe data untuk satu item jadwal
+export interface ScheduleItem {
+  id: string;
+  namaAset: string;
+  lastMaintenance: string;
+  nextMaintenance: string;
+  keterangan: string;
+  pic: string;
+  status: string;
+  yn: boolean;
+}
+
+// Props untuk komponen ini
+interface AddScheduleFormProps {
+  onAddSchedule: (newSchedule: ScheduleItem) => void;
+}
+
+const AddScheduleForm: React.FC<AddScheduleFormProps> = ({ onAddSchedule }) => {
+  const [id, setId] = useState<string>('');
+  const [assetName, setAssetName] = useState<string>('');
+  const [nextMaintenanceDate, setNextMaintenanceDate] = useState<string>('');
+  const [keterangan, setKeterangan] = useState<string>('');
+  const [pic, setPic] = useState<string>('');
 
   const DUMMY_ASSET_OPTIONS = [
     { value: '', label: 'Pilih Nama Aset' },
@@ -28,49 +44,38 @@ const AddScheduleForm = ({ onAddSchedule }) => {
     { value: 'Agus', label: 'Agus' },
   ];
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Validasi sederhana
     if (!id || !assetName || !nextMaintenanceDate || !keterangan || !pic) {
       alert('Mohon lengkapi semua kolom untuk menambahkan jadwal.');
       return;
     }
 
-    const newSchedule = {
+    const newSchedule: ScheduleItem = {
       id,
-      namaAset: assetName, // Sesuaikan dengan nama properti di scheduleData
-      lastMaintenance: '-', // Default untuk data baru
+      namaAset: assetName,
+      lastMaintenance: '-',
       nextMaintenance: nextMaintenanceDate,
       keterangan,
       pic,
-      status: 'Pending', // Default status untuk jadwal baru
-      yn: false, // Default yn untuk jadwal baru
+      status: 'Pending',
+      yn: false,
     };
 
-    // Panggil fungsi onAddSchedule yang diterima dari parent
-    if (onAddSchedule) {
-      onAddSchedule(newSchedule);
-      alert('Jadwal baru berhasil ditambahkan!');
-      // Reset form setelah submit berhasil
-      setId('');
-      setAssetName('');
-      setNextMaintenanceDate('');
-      setKeterangan('');
-      setPic('');
-    } else {
-      console.error("onAddSchedule prop is not provided to AddScheduleForm.");
-      alert('Terjadi kesalahan saat menambahkan jadwal. Mohon coba lagi.');
-    }
+    onAddSchedule(newSchedule);
+
+    alert('Jadwal baru berhasil ditambahkan!');
+    setId('');
+    setAssetName('');
+    setNextMaintenanceDate('');
+    setKeterangan('');
+    setPic('');
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      
-
-      {/* Kontainer utama untuk header dan input fields, menyerupai tabel */}
       <div className="border border-gray-300 rounded-lg overflow-hidden">
-        {/* Header Row */}
         <div className="flex bg-purple-100 text-gray-700 font-semibold text-sm py-3 px-4">
           <div className="flex-1 text-left">ID</div>
           <div className="flex-1 text-left">Nama Aset</div>
@@ -79,9 +84,7 @@ const AddScheduleForm = ({ onAddSchedule }) => {
           <div className="flex-1 text-left">PIC</div>
         </div>
 
-        {/* Input Row */}
-        <div className="flex bg-purple-50 py-3 px-4 items-center space-x-2"> {/* Menambahkan space-x-2 untuk jarak antar kolom */}
-          {/* ID */}
+        <div className="flex bg-purple-50 py-3 px-4 items-center space-x-2">
           <div className="flex-1">
             <InputField
               id="schedule-id"
@@ -89,69 +92,63 @@ const AddScheduleForm = ({ onAddSchedule }) => {
               placeholder="ID..."
               value={id}
               onChange={(e) => setId(e.target.value)}
-              // Override styling InputField agar transparan dan tanpa border
-              className="bg-transparent border-none focus:ring-0 px-0 py-0" // px-0 py-0 untuk padding minimal
+              className="bg-transparent border-none focus:ring-0 px-0 py-0"
             />
           </div>
 
-          {/* Nama Aset (Dropdown) */}
           <div className="flex-1">
             <select
               id="asset-name"
               value={assetName}
               onChange={(e) => setAssetName(e.target.value)}
-              // Override styling select agar transparan dan tanpa border
-              className="w-full bg-transparent border-none focus:ring-0 text-gray-700 text-base px-0 py-0" // px-0 py-0 untuk padding minimal
+              className="w-full bg-transparent border-none focus:ring-0 text-gray-700 text-base px-0 py-0"
             >
-              {DUMMY_ASSET_OPTIONS.map(option => (
-                <option key={option.value} value={option.value}>{option.label}</option>
+              {DUMMY_ASSET_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
               ))}
             </select>
           </div>
 
-          {/* Next Maintenance (Date Picker) */}
           <div className="flex-1">
             <InputField
               id="next-maintenance-date"
               type="date"
               value={nextMaintenanceDate}
               onChange={(e) => setNextMaintenanceDate(e.target.value)}
-              // Override styling InputField agar transparan dan tanpa border
-              className="bg-transparent border-none focus:ring-0 px-0 py-0" // px-0 py-0 untuk padding minimal
+              className="bg-transparent border-none focus:ring-0 px-0 py-0"
             />
           </div>
 
-          {/* Keterangan (InputField type="text") */}
           <div className="flex-1">
             <InputField
               id="keterangan"
-              type="text" // Mengubah dari textarea menjadi input type="text"
+              type="text"
               placeholder="Keterangan..."
               value={keterangan}
               onChange={(e) => setKeterangan(e.target.value)}
-              // Override styling InputField agar transparan dan tanpa border
-              className="bg-transparent border-none focus:ring-0 px-0 py-0" // px-0 py-0 untuk padding minimal
+              className="bg-transparent border-none focus:ring-0 px-0 py-0"
             />
           </div>
 
-          {/* PIC (Dropdown) */}
           <div className="flex-1">
             <select
               id="pic"
               value={pic}
               onChange={(e) => setPic(e.target.value)}
-              // Override styling select agar transparan dan tanpa border
-              className="w-full bg-transparent border-none focus:ring-0 text-gray-700 text-base px-0 py-0" // px-0 py-0 untuk padding minimal
+              className="w-full bg-transparent border-none focus:ring-0 text-gray-700 text-base px-0 py-0"
             >
-              {DUMMY_PIC_OPTIONS.map(option => (
-                <option key={option.value} value={option.value}>{option.label}</option>
+              {DUMMY_PIC_OPTIONS.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
               ))}
             </select>
           </div>
         </div>
       </div>
 
-      {/* Tombol Kirim */}
       <div className="flex justify-end mt-6">
         <PrimaryButton type="submit" className="px-8 py-3">
           Kirim
