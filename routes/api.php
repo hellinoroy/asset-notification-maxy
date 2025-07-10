@@ -64,6 +64,8 @@ Route::controller(HistoriController::class)->group(function () {
     Route::delete('/histori/{id}', 'destroy');
 });
 
+
+
 // Route::get('/ping', function () {
 //     Log::info('Ping route was hit.');
 //     return ['message' => 'pong'];
