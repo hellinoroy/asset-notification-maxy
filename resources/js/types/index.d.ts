@@ -57,3 +57,12 @@ export interface PageProps {
         user: User;
     };
 }
+
+export interface MaintenanceRecord {
+    tanggal: string;
+    id: string;
+    harga_maintenance: number;
+    next_maintenance: string;
+    keterangan: string;
+    pic: string;
+}

@@ -10,13 +10,13 @@ interface User {
 }
 
 // Definisikan tipe untuk props
-interface AuthenticatedLayoutProps {
+interface AuthLayoutProps {
     user: User;
     activeNav?: string;
     header?: ReactNode; // 'header' adalah opsional
 }
 
-export default function AuthenticatedLayout({ user, children }: PropsWithChildren<AuthenticatedLayoutProps>) {
+export default function AuthLayout({ user, children }: PropsWithChildren<AuthLayoutProps>) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
     return (
