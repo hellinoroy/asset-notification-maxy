@@ -69,7 +69,7 @@ return Application::configure(basePath: dirname(__DIR__))
             })->toArray();
 
             foreach ($admins as $admin) {
-                Mail::to($admin->email)->queue(new Notification($tableAdmin));
+                Mail::to($admin->email)->send(new Notification($tableAdmin));
             }
             $grouped = $data->groupBy(function ($item) {
                 return $item->user->email;
@@ -80,7 +80,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 foreach ($items as $jadwal) {
                     Log::info("- {$jadwal->aset->aset_nama} ({$jadwal->jadwal_status})\n");
                 }
-                Mail::to($email)->queue(new Notification($items));
+                Mail::to($email)->send(new Notification($items));
             }
 
             Log::info("notifikasi send");
