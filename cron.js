@@ -4,7 +4,7 @@ import shell from 'shelljs';
 // Schedule tasks to be run on the server.
 cron.schedule('* * * * *', function () {
     console.log('Running cronjobs');
-    shell.exec('php artisan schedule:run >> /dev/null 2>&1');
-    shell.exec('php artisan queue:work --stop-when-empty >> /dev/null 2>&1');
+    shell.exec('php artisan schedule:run');
+    shell.exec('php artisan queue:work --stop-when-empty');
     console.log('Cronjobs Done');
 });
