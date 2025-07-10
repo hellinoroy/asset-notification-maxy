@@ -42,7 +42,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $schedule->call(function () {
             Jadwal::statusUpdate();
             Log::info("status updated");
-        })->daily()
+        })->everyMinute()
             ->name('jadwal_status_update');
 
         $schedule->call(function () {
@@ -84,7 +84,7 @@ return Application::configure(basePath: dirname(__DIR__))
             }
 
             Log::info("notifikasi send");
-        })->daily()
+        })->everyMinute()
             ->name('jadwal_notifikasi');
     })
     ->withExceptions(function (Exceptions $exceptions) {
