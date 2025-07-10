@@ -5,6 +5,6 @@ import shell from 'shelljs';
 cron.schedule('* * * * *', function () {
     console.log('Running cronjobs');
     shell.exec('php artisan schedule:run >> /dev/null 2>&1');
-    shell.exec('php artisan queue:listen >> /dev/null 2>&1');
+    shell.exec('php artisan queue:work --stop-when-empty >> /dev/null 2>&1');
     console.log('Cronjobs Done');
 });
