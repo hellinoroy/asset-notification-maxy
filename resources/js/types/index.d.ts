@@ -41,3 +41,28 @@ export interface User {
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
 }
+
+export interface Asset {
+    id: number;
+    nama_aset: string;
+    tanggal_beli: string;
+    keterangan: string;
+    last_maintenance: string;
+    next_maintenance: string;
+    pic: string;
+}
+
+export interface PageProps {
+    auth: {
+        user: User;
+    };
+}
+
+export interface MaintenanceRecord {
+    tanggal: string;
+    id: string;
+    harga_maintenance: number;
+    next_maintenance: string;
+    keterangan: string;
+    pic: string;
+}

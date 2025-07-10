@@ -6,7 +6,7 @@ use App\Models\Aset;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
-class AsetController extends Controller
+class AssetController extends Controller
 {
     // GET /api/aset
     public function index()
@@ -46,6 +46,7 @@ class AsetController extends Controller
             ], 500);
         }
     }
+
 
     // Ini nanti
     // GET /api/aset/{id}
@@ -111,4 +112,6 @@ class AsetController extends Controller
             ], 500);
         }
     }
+
+    
 }
