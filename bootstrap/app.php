@@ -53,7 +53,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $schedule->call(function () {
             Jadwal::statusUpdate();
             Log::info("status updated");
-        })->everyTwoSeconds()
+        })->daily()
             ->name('jadwal_status_update');
 
         $schedule->call(function () {
@@ -86,7 +86,7 @@ return Application::configure(basePath: dirname(__DIR__))
                     $admin->notify(new \App\Notifications\JadwalReminder($jadwal));
                 }
             }
-        })->everyTwoSeconds()->name('jadwal_reminder_schedule')->withoutOverlapping();
+        })->daily()->name('jadwal_reminder_schedule')->withoutOverlapping();
 
 
         // $schedule->call(function () {
