@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useMemo, useState } from 'react';
+import AddAsetForm from '../components/AddAsetForm';
 import AssetTable from '../components/AssetTable';
 import Pagination from '../components/Pagination';
 import SearchBar from '../components/SearchBar';
@@ -17,6 +18,8 @@ interface AssetItem {
 }
 
 const AssetPage: React.FC = () => {
+    const [user, setUser] = useState<any[]>([]);
+
     const [overdue, setOverdue] = useState(0);
     const [pending, setPending] = useState(0);
     const [selesai, setSelesai] = useState(0);
@@ -65,7 +68,15 @@ const AssetPage: React.FC = () => {
     const itemsPerPage = 5;
 
     const filteredAssets = useMemo(() => {
-        return assets.filter((item) => Object.values(item).some((val) => val.toLowerCase().includes(searchTerm.toLowerCase())));
+        const term = searchTerm.toLowerCase();
+
+        return assets.filter((item) =>
+            Object.values(item).some((val) =>
+                String(val ?? '')
+                    .toLowerCase()
+                    .includes(term),
+            ),
+        );
     }, [assets, searchTerm]);
 
     const totalPages = Math.ceil(filteredAssets.length / itemsPerPage);
@@ -108,6 +119,11 @@ const AssetPage: React.FC = () => {
                             <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
                         </>
                     )}
+                </div>
+
+                <div className="rounded-lg bg-white p-6 shadow-md">
+                    <h2 className="mb-4 text-xl font-semibold text-gray-700">Tambahkan Jadwal Aset</h2>
+                    <AddAsetForm />
                 </div>
             </div>
         </AdminLayout>
