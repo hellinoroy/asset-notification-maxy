@@ -16,7 +16,6 @@ Route::get('/', function () {
     return redirect()->route('login');
 })->name('login_redirect');
 
-
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard', [
@@ -39,8 +38,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('TambahAssetPage');
     })->name('aset-add');
 
-    Route::get('/aset/{id}/edit', fn() => Inertia::render('EditAssetPage'))
-        ->name('aset-edit');
+    Route::get('/aset/{id}/edit', function () {
+        return Inertia::render('EditAssetPage');
+    })->name('aset-edit');
+
+    Route::get('/laporan', function () {
+        return Inertia::render('LaporanPage');
+    })->name('laporan');
+
+    
+
 });
 
 

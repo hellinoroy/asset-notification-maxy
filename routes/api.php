@@ -38,7 +38,7 @@ Route::middleware('auth')->group(function () {
         ]);
     });
 
-    Route::Get('/stat-card', function () {
+    Route::get('/stat-card', function () {
         $totalSelesai = Jadwal::where('jadwal_status', 'Selesai')
             ->count();
         $totalTerlambat = Jadwal::where('jadwal_status', 'Terlambat')
@@ -72,6 +72,9 @@ Route::middleware('auth')->group(function () {
     });
 
     Route::put('/jadwal-selesai/{id}', [JadwalController::class, 'updateStatus']);
+
+    Route::get('/jadwal-done', [JadwalController::class, 'getSelesai']);
+
 });
 
 Route::middleware(['role:Admin'])->group(function () {
@@ -96,7 +99,7 @@ Route::middleware(['role:Admin'])->group(function () {
 
     Route::post('/jadwal', [JadwalController::class, 'store']);
 
-    Route::delete('/aset/{id}',  [JadwalController::class, 'destroy']);
+    Route::delete('/jadwal/{id}',  [JadwalController::class, 'destroy']);
 
     Route::post('/aset', [AsetController::class, 'store']);
 

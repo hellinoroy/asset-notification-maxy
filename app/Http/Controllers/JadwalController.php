@@ -26,7 +26,7 @@ class JadwalController extends Controller
                 ->orderByRaw("FIELD(jadwal_status, 'Terlambat', 'Pending', 'Aman')")
                 ->orderBy('jadwal_tanggal')
                 ->get();
-                
+
             return response()->json(['data' => $query], 200);
         } catch (\Exception $e) {
             return response()->json([
@@ -36,6 +36,26 @@ class JadwalController extends Controller
         }
     }
 
+    public function getSelesai()
+    {
+        try {
+            $query = Jadwal::with([
+                'aset' => function ($q) {
+                    $q->select(['aset_id', 'aset_nomor', 'aset_nama'])
+                        ->with(['latestSelesaiJadwal']);
+                },
+                'user'
+            ])  ->where('jadwal_status', 'Selesai')
+                ->get();
+
+            return response()->json(['data' => $query], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Gagal mengambil aset.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 
     // POST /jadwal
     public function store(Request $request)

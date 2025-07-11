@@ -1,7 +1,7 @@
 // resources/js/components/Sidebar.tsx
 import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
 import { Link, router } from '@inertiajs/react';
-import { LogOut, LucideIcon, ClipboardList, Home } from 'lucide-react';
+import { LogOut, LucideIcon, ClipboardList, Home, FileText } from 'lucide-react';
 
 interface SidebarProps {
     currentPath: string;
@@ -24,11 +24,13 @@ export default function Sidebar({ currentPath }: any) {
     // const navItems: NavItem[] = [
     //     { name: 'Aset', icon: Home, path: route('home') },
     //     { name: 'Jadwal', icon: ClipboardList, path: route('home') },
-    //     { name: 'Laporan', icon: FileText, path: route('home') },
+    
     // ];
+
     const navItems: NavItem[] = [
         { name: 'Aset', icon: Home, path: route('aset_view') },
         { name: 'Jadwal', icon: ClipboardList, path: route('jadwal_view') },
+        { name: 'Laporan', icon: FileText, path: route('laporan') },
     ];
 
     return (
