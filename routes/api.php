@@ -43,12 +43,13 @@ Route::middleware('auth')->group(function () {
             ->count();
         $totalTerlambat = Jadwal::where('jadwal_status', 'Terlambat')
             ->count();
-
-        $upcoming = Jadwal::whereBetween(
-                 'jadwal_tanggal',
-                 [now(), now()->addDays(3)]
-             )->count();
-
+            
+        $upcoming = Jadwal::where('jadwal_status', 'Aman')       
+            ->whereBetween(
+                'jadwal_tanggal',
+                [now(), now()->addDays(3)]
+            )
+            ->count();
         return response()->json([
             'message' => 'Stat card fetched successfully.',
             'stat_card'    => [
@@ -96,47 +97,34 @@ Route::middleware(['role:Admin'])->group(function () {
     });
 
     Route::post('/jadwal', [JadwalController::class, 'store']);
+
+    Route::delete('/aset/{id}',  [JadwalController::class, 'destroy']);
+
+    Route::post('/aset', [AsetController::class, 'store']);
+
+    Route::put('/aset/{id}', [AsetController::class, 'update']);
+
+    Route::delete('/aset/{id}', [AsetController::class, 'destroy']);
 });
 
 Route::controller(AsetController::class)->group(function () {
-    // GET /api/aset
+
     Route::get('/aset', 'index');
-
-    // POST /api/aset
-    Route::post('/aset', 'store');
-
-    // PUT /api/aset/{id}
-    Route::put('/aset/{id}', 'update');
-
-    // DELETE /api/aset/{id}
-    Route::delete('/aset/{id}', 'destroy');
 });
 
 Route::controller(JadwalController::class)->group(function () {
-    // GET /api/jadwal
+
     Route::get('/jadwal', 'index');
-
-    // POST /api/jadwal
-    Route::post('/jadwal', 'store');
-
-    // PUT /api/jadwal/{id}
-    Route::put('/jadwal/{id}', 'update');
-
-    // DELETE /api/aset/{id}
-    Route::delete('/jadwal/{id}', 'destroy');
 });
 
 Route::controller(HistoriController::class)->group(function () {
-    // GET /api/histori
+
     Route::get('/histori', 'index');
 
-    // POST /api/histori
     Route::post('/histori', 'store');
 
-    // PUT /api/histori
     Route::put('/histori/{id}', 'update');
 
-    // Delete /api/histori
     Route::delete('/histori/{id}', 'destroy');
 });
 
