@@ -26,4 +26,10 @@ class AsetHistori extends Model
     {
         return $this->belongsTo(Aset::class, 'aset_id', 'aset_id');
     }
+
+    public function latestHistori()
+    {
+        return $this->hasOne(Histori::class, 'histori_id')
+            ->latestOfMany('histori_tanggal');
+    }
 }

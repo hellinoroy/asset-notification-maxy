@@ -15,8 +15,39 @@ class JadwalController extends Controller
     public function index()
     {
         try {
-            $query = Jadwal::with(['aset'])
+            $query = Jadwal::with([
+                'aset' => function ($q) {
+                    $q->select(['aset_id', 'aset_nomor', 'aset_nama'])
+                        ->with(['latestSelesaiJadwal']);
+                },
+                'user'
+            ])
+                ->where('jadwal_status', '!=', 'Selesai')
+                ->orderByRaw("FIELD(jadwal_status, 'Terlambat', 'Pending', 'Aman')")
+                ->orderBy('jadwal_tanggal')
                 ->get();
+
+            return response()->json(['data' => $query], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Gagal mengambil aset.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function getSelesai()
+    {
+        try {
+            $query = Jadwal::with([
+                'aset' => function ($q) {
+                    $q->select(['aset_id', 'aset_nomor', 'aset_nama'])
+                        ->with(['latestSelesaiJadwal']);
+                },
+                'user'
+            ])  ->where('jadwal_status', 'Selesai')
+                ->get();
+
             return response()->json(['data' => $query], 200);
         } catch (\Exception $e) {
             return response()->json([
@@ -45,7 +76,7 @@ class JadwalController extends Controller
             if ($jadwalDate->lt($date)) {
                 return response()->json(['message' => 'Jadwal tidak boleh kurang dari hari ini'], 400);
             }
-            
+
             if ($date == $jadwalDate) {
                 $validated['jadwal_status'] = 'Pending';
             } else {
@@ -90,6 +121,31 @@ class JadwalController extends Controller
             if ($jadwalDate->lt($date)) {
                 return response()->json(['message' => 'Jadwal tidak boleh kurang dari hari ini'], 400);
             }
+
+            $jadwal->update($validated);
+            return response()->json([
+                'message' => 'Jadwal berhasil diupdate',
+                'data' => $jadwal
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Gagal update jadwal.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        try {
+            $jadwal = Jadwal::find($id);
+            if (!$jadwal) {
+                return response()->json(['message' => 'Jadwal tidak ditemukan'], 404);
+            }
+
+            $validated = $request->validate([
+                'jadwal_status'        => 'string'
+            ]);
 
             $jadwal->update($validated);
             return response()->json([
