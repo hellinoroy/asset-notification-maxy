@@ -1,4 +1,4 @@
-// resources/js/components/AddAssetForm.tsx
+
 import { router } from '@inertiajs/react';
 import axios from 'axios';
 import React, { useState } from 'react';
@@ -37,7 +37,6 @@ export default function AddAssetForm() {
     }
   };
 
-  /* ⬇️ UI ------------------------------------------------------------------- */
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="overflow-hidden rounded-lg border border-gray-300">
@@ -49,7 +48,7 @@ export default function AddAssetForm() {
         </div>
 
         <div className="flex items-center space-x-2 bg-purple-50 px-4 py-3">
-          {/* Nomor ---------------------------------------------------------- */}
+
           <div className="flex-1">
             <InputField
               id="aset-nomor"
@@ -61,7 +60,7 @@ export default function AddAssetForm() {
             />
           </div>
 
-          {/* Nama ----------------------------------------------------------- */}
+
           <div className="flex-1">
             <InputField
               id="aset-nama"
@@ -73,7 +72,7 @@ export default function AddAssetForm() {
             />
           </div>
 
-          {/* Tahun Beli ----------------------------------------------------- */}
+
           <div className="flex-1">
             <InputField
               id="aset-tahun-beli"
@@ -87,7 +86,6 @@ export default function AddAssetForm() {
             />
           </div>
 
-          {/* Keterangan ----------------------------------------------------- */}
           <div className="flex-1">
             <InputField
               id="aset-keterangan"

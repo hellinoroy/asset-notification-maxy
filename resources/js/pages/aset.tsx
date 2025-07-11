@@ -1,3 +1,4 @@
+import { Link } from '@inertiajs/react';
 import axios from 'axios';
 import React, { useEffect, useMemo, useState } from 'react';
 import AddAsetForm from '../components/AddAsetForm';
@@ -8,6 +9,7 @@ import StatCard from '../components/StatCard';
 import AdminLayout from '../layouts/AdminLayout';
 
 interface AssetItem {
+    aset_id: number,
     id: string;
     namaAset: string;
     tanggalBeli: string;
@@ -41,10 +43,11 @@ const AssetPage: React.FC = () => {
                 setSelesai(sc.totalSelesai ?? 0);
 
                 const rows = asetRes.data.data ?? asetRes.data;
-                console.log(asetRes);
+                console.log(rows);
                 setAssets(
                     rows.map(
                         (r: any): AssetItem => ({
+                            aset_id: r.aset_id,
                             id: r.aset_nomor ?? `AST${String(r.aset_id).padStart(3, '0')}`,
                             namaAset: r.aset_nama,
                             tanggalBeli: r.aset_tahun_beli ?? '-',
@@ -91,6 +94,7 @@ const AssetPage: React.FC = () => {
         setCurrentPage(1);
     };
 
+
     return (
         <AdminLayout>
             <div className="space-y-10">
@@ -101,6 +105,15 @@ const AssetPage: React.FC = () => {
                     <StatCard title="Total Maintenance" value={selesai} />
                     <StatCard title="Jadwal Terdekat" value={pending} />
                     <StatCard title="Overdue" value={overdue} />
+                </div>
+
+                <div className="py-3">
+                    <Link
+                        href={route('aset-add')}
+                        className="float-end mr-4 ml-auto rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow transition duration-200 hover:bg-blue-700"
+                    >
+                        + Tambah Aset
+                    </Link>
                 </div>
 
                 {/* table + search + pagination */}
@@ -119,11 +132,6 @@ const AssetPage: React.FC = () => {
                             <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} />
                         </>
                     )}
-                </div>
-
-                <div className="rounded-lg bg-white p-6 shadow-md">
-                    <h2 className="mb-4 text-xl font-semibold text-gray-700">Tambahkan Jadwal Aset</h2>
-                    <AddAsetForm />
                 </div>
             </div>
         </AdminLayout>

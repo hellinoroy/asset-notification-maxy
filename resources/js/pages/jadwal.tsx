@@ -84,11 +84,7 @@ const Welcome: React.FC = () => {
                     <div className="mb-4 flex flex-col items-center justify-between space-y-4 sm:flex-row sm:space-y-0 sm:space-x-4"></div>
                     <div className="mb-4 flex justify-end space-x-4">
                         <SearchBar searchTerm={searchTerm} onSearch={setSearchTerm} />
-                        {/* <Link href={route('editpage')}>
-                            <ActionButton icon={SquarePen} className="bg-blue-600 text-white hover:bg-blue-700">
-                                Edit Jadwal
-                            </ActionButton>
-                        </Link> */}
+
                     </div>
 
                     <ScheduleTable currentItems={currentItems} />

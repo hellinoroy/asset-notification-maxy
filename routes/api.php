@@ -6,7 +6,7 @@ use App\Http\Controllers\AsetController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\HistoriController;
 use Illuminate\Support\Facades\Log;
-
+use Illuminate\Validation\Rule;
 
 use Illuminate\Support\Facades\Auth;
 use App\Models\Jadwal;
@@ -43,8 +43,8 @@ Route::middleware('auth')->group(function () {
             ->count();
         $totalTerlambat = Jadwal::where('jadwal_status', 'Terlambat')
             ->count();
-            
-        $upcoming = Jadwal::where('jadwal_status', 'Aman')       
+
+        $upcoming = Jadwal::where('jadwal_status', 'Aman')
             ->whereBetween(
                 'jadwal_tanggal',
                 [now(), now()->addDays(3)]
@@ -59,8 +59,6 @@ Route::middleware('auth')->group(function () {
             ],
         ]);
     });
-
-
 
     Route::post('/notification/{id}/read', function ($id) {
         $notification = Auth::user()->unreadNotifications()->find($id);
@@ -105,6 +103,40 @@ Route::middleware(['role:Admin'])->group(function () {
     Route::put('/aset/{id}', [AsetController::class, 'update']);
 
     Route::delete('/aset/{id}', [AsetController::class, 'destroy']);
+
+    Route::get('/aset/{id}', function ($id) {
+        $aset = Aset::find($id);
+        if (!$aset) {
+            return response()->json(['message' => 'Aset tidak ditemukan.'], 404);
+        }
+        return response()->json($aset);
+    });
+
+    Route::put('{id}', function (Request $request, $id) {
+        $aset = Aset::find($id);
+
+        if (!$aset) {
+            return response()->json(['message' => 'Aset tidak ditemukan.'], 404);
+        }
+
+        $validated = $request->validate([
+            'aset_nomor'      => [
+                'required',
+                'string',
+                Rule::unique('aset', 'aset_nomor')->ignore($aset->aset_id, 'aset_id'),
+            ],
+            'aset_nama'       => 'required|string',
+            'aset_tahun_beli' => 'required|integer',
+            'aset_keterangan' => 'nullable|string',
+        ]);
+
+        $aset->update($validated);
+
+        return response()->json([
+            'message' => 'Aset berhasil diperbarui.',
+            'data'    => $aset,
+        ]);
+    });
 });
 
 Route::controller(AsetController::class)->group(function () {
