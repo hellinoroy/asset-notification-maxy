@@ -23,7 +23,6 @@ export default function AdminLayout({ children } : any)  {
 
         {/* Page Content */}
         <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-10 p-6">
-            <h1>Hello</h1>
           {children}
         </main>
       </div>

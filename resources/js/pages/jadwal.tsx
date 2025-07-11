@@ -24,7 +24,7 @@ const Welcome: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
 
     useEffect(() => {
-        async function fetchNotifications() {
+        async function fetchJadwal() {
             try {
                 const response = await axios.get('/api/jadwal', { withCredentials: true });
                 console.log(response.data.data);
@@ -34,13 +34,12 @@ const Welcome: React.FC = () => {
             }
         }
 
-        fetchNotifications();
+        fetchJadwal();
     }, []);
 
     const itemsPerPage = 5;
 
     const filteredData = scheduleData.filter((item) => item.aset.aset_nama?.toLowerCase().includes(searchTerm.toLowerCase()));
-
     const totalPages = Math.ceil(filteredData.length / itemsPerPage);
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -99,7 +98,7 @@ const Welcome: React.FC = () => {
 
                 <div className="rounded-lg bg-white p-6 shadow-md">
                     <h2 className="mb-4 text-xl font-semibold text-gray-700">Tambahkan Jadwal Aset</h2>
-                    <AddScheduleForm onAddSchedule={handleAddSchedule} />
+                    <AddScheduleForm  />
                 </div>
             </div>
         </AdminLayout>

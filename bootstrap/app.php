@@ -28,6 +28,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        
         $middleware->append([
             TrustProxies::class,
         ]);
@@ -49,11 +50,11 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withSchedule(function (Schedule $schedule) {
 
-        $schedule->call(function () {
-            Jadwal::statusUpdate();
-            Log::info("status updated");
-        })->daily()
-            ->name('jadwal_status_update');
+        // $schedule->call(function () {
+        //     Jadwal::statusUpdate();
+        //     Log::info("status updated");
+        // })->everyTwoSeconds()
+        //     ->name('jadwal_status_update');
 
         $schedule->call(function () {
             $today = Carbon::today();
@@ -65,10 +66,13 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->whereDate('jadwal_tanggal', '<=', $threeDaysLater)
                 ->get();
 
+            // Log::info($jadwals);
+
             foreach ($jadwals as $jadwal) {
                 if ($jadwal->user) {
                     $jadwal->user->notify(new \App\Notifications\JadwalReminder($jadwal));
                 }
+                // Log::info($jadwal);
             }
 
             // Notify Admins - You can customize what kind of notification to send
@@ -77,6 +81,8 @@ return Application::configure(basePath: dirname(__DIR__))
             foreach ($admins as $admin) {
 
                 foreach ($jadwals as $jadwal) {
+                    // Log::info($jadwal);
+                    // Log::info($admin);
                     $admin->notify(new \App\Notifications\JadwalReminder($jadwal));
                 }
             }

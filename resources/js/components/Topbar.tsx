@@ -1,5 +1,6 @@
+import axios from 'axios';
 import { Bell, History, User } from 'lucide-react';
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface Notification {
     id: number;
@@ -10,35 +11,75 @@ interface Notification {
     read: boolean;
 }
 
-const Topbar: React.FC = () => {
+export default function Topbar() {
     const [showNotifications, setShowNotifications] = useState(false);
+    const [user, setUser] = useState<any[]>([]);
+    const [notifications, setNotifications] = useState<any[]>([]);
 
-    const notifications: Notification[] = [
-        {
-            id: 1,
-            type: 'status_update',
-            title: 'Pembaruan Status',
-            message: 'Budi menandai aset MBL01 – Mobil HRV sebagai Selesai pada 26 November 2025',
-            date: '26 November 2025',
-            read: false,
-        },
-        {
-            id: 2,
-            type: 'upcoming_maintenance',
-            title: 'Besok Maintenance!',
-            message: 'Sari mengubah status aset GEN03 – Genset Gudang menjadi Pending. Jadwal berikutnya: 5 Desember 2025',
-            date: '5 Desember 2025',
-            read: false,
-        },
-        {
-            id: 3,
-            type: 'overdue_maintenance',
-            title: 'Maintenance Terlambat!',
-            message: 'Aset MBL01 – Mobil Honda HRV belum menjalani maintenance sejak 25 November 2025.',
-            date: '25 November 2025',
-            read: false,
-        },
-    ];
+    useEffect(() => {
+        // theres another user fetch in scheduleTable
+        async function fetchUser() {
+            try {
+                const response = await axios.get('/api/user', { withCredentials: true });
+                // console.log(response.data);
+                setUser(response.data);
+                // setNotifications(response.data.notifications);
+            } catch (err) {
+                console.error('Error fetching notifications:', err);
+            }
+        }
+        async function fetchNotifications() {
+            try {
+                const response = await axios.get('/api/notification', { withCredentials: true });
+                console.log(response.data);
+                setNotifications(response.data.notifications);
+            } catch (err) {
+                console.error('Error fetching notifications:', err);
+            }
+        }
+        fetchNotifications();
+        fetchUser();
+    }, []);
+
+    function NotificationList() {
+        const markAsRead = async (notificationId: any) => {
+            try {
+                await axios.post(`/api/notification/${notificationId}/read`, {}, { withCredentials: true });
+                setNotifications((prev) => prev.filter((notif) => notif.id !== notificationId));
+            } catch (error) {
+                console.error('Error marking notification as read:', error);
+            }
+        };
+
+        return (
+            <div>
+                <ul>
+                    {notifications.length > 0 ? (
+                        notifications.map((notif, index) => (
+                            <li key={index} className="m-4 mb-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+                                <div className="mb-2 text-sm font-medium text-gray-800">📢 {notif.data.message}</div>
+                                <div className="mb-1 text-xs text-gray-600">
+                                    <span className="font-semibold">Keterangan:</span> {notif.data.jadwal_keterangan}
+                                </div>
+                                <div className="mb-2 text-xs text-gray-600">
+                                    <span className="font-semibold">PIC:</span> {notif.data.user_name}
+                                </div>
+
+                                <button
+                                    onClick={() => markAsRead(notif.id)}
+                                    className="mt-2 rounded bg-blue-600 px-3 py-1 text-xs text-white hover:bg-blue-700"
+                                >
+                                    Mark as Read
+                                </button>
+                            </li>
+                        ))
+                    ) : (
+                        <div className="p-4 text-center text-sm text-gray-500">Tidak ada notifikasi baru.</div>
+                    )}
+                </ul>
+            </div>
+        );
+    }
 
     const unreadNotificationsCount = notifications.filter((notif) => !notif.read).length;
 
@@ -69,31 +110,8 @@ const Topbar: React.FC = () => {
                                 <h3 className="font-semibold text-gray-800">Notifikasi ({unreadNotificationsCount} Baru)</h3>
                             </div>
                             <div className="max-h-80 overflow-y-auto">
-                                {notifications.length > 0 ? (
-                                    notifications.map((notif) => (
-                                        <div
-                                            key={notif.id}
-                                            className={`cursor-pointer border-b border-gray-100 p-4 last:border-b-0 ${
-                                                notif.read ? 'bg-gray-50 text-gray-600' : 'bg-white text-gray-800 hover:bg-gray-100'
-                                            }`}
-                                            onClick={() => console.log(`Notifikasi ${notif.id} diklik`)}
-                                        >
-                                            <p className="mb-1 text-sm font-semibold">{notif.title}</p>
-                                            <p className="text-xs text-gray-700">{notif.message}</p>
-                                            <p className="mt-1 text-xs text-gray-500">{notif.date}</p>
-                                        </div>
-                                    ))
-                                ) : (
-                                    <div className="p-4 text-center text-sm text-gray-500">Tidak ada notifikasi baru.</div>
-                                )}
+                                <NotificationList />
                             </div>
-                            {notifications.length > 0 && (
-                                <div className="border-t border-gray-200 px-4 py-2 text-center">
-                                    <button className="text-sm text-blue-600 hover:underline" onClick={() => console.log('Lihat semua notifikasi')}>
-                                        Lihat Semua Notifikasi
-                                    </button>
-                                </div>
-                            )}
                         </div>
                     )}
                 </div>
@@ -105,13 +123,13 @@ const Topbar: React.FC = () => {
                         {/* Atau gunakan <img src="..." alt="Profile" /> untuk gambar user */}
                     </div>
                     <div>
-                        <p className="font-semibold text-gray-800">Nama</p>
-                        <p className="text-sm text-gray-500">Staff</p>
+                        <p className="font-semibold text-gray-800">{user.name}</p>
+                        <p className="text-sm text-gray-500">{user.role}</p>
                     </div>
                 </div>
+
+                
             </div>
         </header>
     );
-};
-
-export default Topbar;
+}

@@ -11,9 +11,9 @@ use Inertia\Inertia;
 
 Route::get('/', function () {
     if (Auth::check()) {
-        return redirect()->route('dashboard');
+        return redirect()->route('jadwal_view');
     }
-    return Inertia::render('auth/login');
+    return redirect()->route('login');
 })->name('login_redirect');
 
 

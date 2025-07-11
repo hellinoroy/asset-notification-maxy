@@ -21,7 +21,12 @@ class JadwalController extends Controller
                         ->with(['asetHistori.latestHistori']);
                 },
                 'user'
-            ])->get();
+            ])
+                ->where('jadwal_status', '!=', 'Selesai')
+                ->orderByRaw("FIELD(jadwal_status, 'Terlambat', 'Pending', 'Aman')")
+                ->orderBy('jadwal_tanggal') // second level sort
+                ->get();
+
             return response()->json(['data' => $query], 200);
         } catch (\Exception $e) {
             return response()->json([
@@ -30,6 +35,7 @@ class JadwalController extends Controller
             ], 500);
         }
     }
+
 
     // POST /jadwal
     public function store(Request $request)
@@ -95,6 +101,31 @@ class JadwalController extends Controller
             if ($jadwalDate->lt($date)) {
                 return response()->json(['message' => 'Jadwal tidak boleh kurang dari hari ini'], 400);
             }
+
+            $jadwal->update($validated);
+            return response()->json([
+                'message' => 'Jadwal berhasil diupdate',
+                'data' => $jadwal
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Gagal update jadwal.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function updateStatus(Request $request, $id)
+    {
+        try {
+            $jadwal = Jadwal::find($id);
+            if (!$jadwal) {
+                return response()->json(['message' => 'Jadwal tidak ditemukan'], 404);
+            }
+
+            $validated = $request->validate([
+                'jadwal_status'        => 'string'
+            ]);
 
             $jadwal->update($validated);
             return response()->json([
