@@ -54,7 +54,7 @@ export default function ScheduleTable({ currentItems = [] }: any) {
             await axios.delete(`/api/jadwal/${jadwal_id}`);
             router.visit('/jadwal');
         } catch (err) {
-            console.log(err)
+            console.log(err);
             alert(err?.response?.data?.message ?? 'Gagal menghapus jadwal.');
         }
     };
@@ -97,7 +97,7 @@ export default function ScheduleTable({ currentItems = [] }: any) {
                             <td className="px-6 py-4 text-sm font-medium whitespace-nowrap text-gray-900">{item.aset.aset_nomor}</td>
                             <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-800">{item.aset.aset_nama}</td>
                             <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-800">
-                                {item?.aset?.aset_histori?.[0]?.latest_histori?.histori_tanggal || '-'}
+                                {item.aset?.latest_selesai_jadwal?.jadwal_tanggal ?? '-'}
                             </td>
                             <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-800">{item.jadwal_tanggal}</td>
                             <td className="px-6 py-4 text-sm whitespace-nowrap text-gray-800">{item.jadwal_keterangan}</td>

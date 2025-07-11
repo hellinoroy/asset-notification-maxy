@@ -13,7 +13,12 @@ class AsetController extends Controller
     {
         try {
             // Log::info('aset/index');
-            $query = Aset::all();
+            $query = Aset::with([                
+                'latestSelesaiJadwal',        
+                'nextJadwal:id,aset_id,jadwal_tanggal,jadwal_status', 
+            ])->get();
+
+
             return response()->json(['data' => $query], 200);
         } catch (\Exception $e) {
             return response()->json([

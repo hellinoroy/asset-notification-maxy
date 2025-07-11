@@ -18,15 +18,15 @@ class JadwalController extends Controller
             $query = Jadwal::with([
                 'aset' => function ($q) {
                     $q->select(['aset_id', 'aset_nomor', 'aset_nama'])
-                        ->with(['asetHistori.latestHistori']);
+                        ->with(['latestSelesaiJadwal']);
                 },
                 'user'
             ])
                 ->where('jadwal_status', '!=', 'Selesai')
                 ->orderByRaw("FIELD(jadwal_status, 'Terlambat', 'Pending', 'Aman')")
-                ->orderBy('jadwal_tanggal') // second level sort
+                ->orderBy('jadwal_tanggal')
                 ->get();
-
+                
             return response()->json(['data' => $query], 200);
         } catch (\Exception $e) {
             return response()->json([
