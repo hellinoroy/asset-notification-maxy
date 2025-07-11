@@ -96,7 +96,7 @@ Route::middleware(['role:Admin'])->group(function () {
 
     Route::post('/jadwal', [JadwalController::class, 'store']);
 
-    Route::delete('/jadwal/{id}',  [JadwalController::class, 'destroy']);
+    Route::delete('/aset/{id}',  [JadwalController::class, 'destroy']);
 
     Route::post('/aset', [AsetController::class, 'store']);
 
