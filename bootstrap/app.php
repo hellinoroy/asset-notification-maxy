@@ -50,11 +50,11 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withSchedule(function (Schedule $schedule) {
 
-        // $schedule->call(function () {
-        //     Jadwal::statusUpdate();
-        //     Log::info("status updated");
-        // })->everyTwoSeconds()
-        //     ->name('jadwal_status_update');
+        $schedule->call(function () {
+            Jadwal::statusUpdate();
+            Log::info("status updated");
+        })->everyTwoSeconds()
+            ->name('jadwal_status_update');
 
         $schedule->call(function () {
             $today = Carbon::today();
