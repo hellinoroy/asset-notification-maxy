@@ -13,7 +13,7 @@ use App\Models\Jadwal;
 use App\Models\User;
 use App\Models\Aset;
 use App\Notifications\JadwalReminder;
-
+use Carbon\Carbon;
 
 
 Route::get('/user', function (Request $request) {
@@ -37,6 +37,29 @@ Route::middleware('auth')->group(function () {
             'notifications' => $notifications,
         ]);
     });
+
+    Route::Get('/stat-card', function () {
+        $totalSelesai = Jadwal::where('jadwal_status', 'Selesai')
+            ->count();
+        $totalTerlambat = Jadwal::where('jadwal_status', 'Terlambat')
+            ->count();
+
+        $upcoming = Jadwal::whereBetween(
+                 'jadwal_tanggal',
+                 [now(), now()->addDays(3)]
+             )->count();
+
+        return response()->json([
+            'message' => 'Stat card fetched successfully.',
+            'stat_card'    => [
+                'totalSelesai'   => $totalSelesai,
+                'totalTerlambat' => $totalTerlambat,
+                'totalTerdekat'  => $upcoming,
+            ],
+        ]);
+    });
+
+
 
     Route::post('/notification/{id}/read', function ($id) {
         $notification = Auth::user()->unreadNotifications()->find($id);
@@ -72,7 +95,7 @@ Route::middleware(['role:Admin'])->group(function () {
         ]);
     });
 
-   Route::post('/jadwal', [JadwalController::class, 'store']);
+    Route::post('/jadwal', [JadwalController::class, 'store']);
 });
 
 Route::controller(AsetController::class)->group(function () {

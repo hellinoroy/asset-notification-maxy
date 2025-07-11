@@ -30,6 +30,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/jadwal', function () {
         return Inertia::render('jadwal');
     })->name('jadwal_view');
+
+    Route::get('/aset', function () {
+        return Inertia::render('aset');
+    })->name('aset_view');
+
 });
 
 

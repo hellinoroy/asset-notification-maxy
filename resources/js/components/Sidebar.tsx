@@ -1,7 +1,7 @@
 // resources/js/components/Sidebar.tsx
 import { useMobileNavigation } from '@/hooks/use-mobile-navigation';
 import { Link, router } from '@inertiajs/react';
-import { LogOut, LucideIcon } from 'lucide-react';
+import { LogOut, LucideIcon, ClipboardList, Home } from 'lucide-react';
 
 interface SidebarProps {
     currentPath: string;
@@ -26,6 +26,10 @@ export default function Sidebar({ currentPath }: any) {
     //     { name: 'Jadwal', icon: ClipboardList, path: route('home') },
     //     { name: 'Laporan', icon: FileText, path: route('home') },
     // ];
+    const navItems: NavItem[] = [
+        { name: 'Aset', icon: Home, path: route('aset_view') },
+        { name: 'Jadwal', icon: ClipboardList, path: route('jadwal_view') },
+    ];
 
     return (
         <div className="flex w-64 flex-col justify-between bg-white px-4 py-6 shadow-lg">
@@ -36,7 +40,7 @@ export default function Sidebar({ currentPath }: any) {
 
             {/* Navigasi */}
             <nav className="flex-1 space-y-2">
-                {/* {navItems.map((item) => (
+                {navItems.map((item) => (
                     <Link
                         key={item.name}
                         href={item.path}
@@ -48,7 +52,7 @@ export default function Sidebar({ currentPath }: any) {
                         {item.name}
                         {currentPath.startsWith(item.path) && <span className="ml-auto text-white"> &gt; </span>}
                     </Link>
-                ))} */}
+                ))}
             </nav>
 
             {/* Tombol Keluar */}
@@ -58,12 +62,11 @@ export default function Sidebar({ currentPath }: any) {
                     href={route('logout')}
                     as="button"
                     onClick={handleLogout}
-                    className="flex w-full items-center rounded-lg p-3 text-lg font-medium text-red-600 transition-colors duration-200 hover:bg-red-50 cursor-pointer"
+                    className="flex w-full cursor-pointer items-center rounded-lg p-3 text-lg font-medium text-red-600 transition-colors duration-200 hover:bg-red-50"
                 >
                     <LogOut className="mr-3 h-5 w-5" />
                     Keluar
                 </Link>
-
             </div>
         </div>
     );
