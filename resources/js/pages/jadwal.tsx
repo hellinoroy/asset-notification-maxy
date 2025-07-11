@@ -49,34 +49,10 @@ const Welcome: React.FC = () => {
         setCurrentPage(pageNumber);
     };
 
-    const handleAddSchedule = (newSchedule: ScheduleItem) => {
-        setScheduleData((prevData) => {
-            const existingItemIndex = prevData.findIndex((item) => item.id === newSchedule.id);
-
-            if (existingItemIndex > -1) {
-                const existingItem = prevData[existingItemIndex];
-                const updatedItem: ScheduleItem = {
-                    ...existingItem,
-                    ...newSchedule,
-                    lastMaintenance: newSchedule.lastMaintenance === '-' ? existingItem.lastMaintenance : newSchedule.lastMaintenance,
-                };
-
-                const updatedData = prevData.map((item, index) => (index === existingItemIndex ? updatedItem : item));
-                alert('Jadwal berhasil diperbarui!');
-                return updatedData;
-            } else {
-                alert('Jadwal baru berhasil ditambahkan!');
-                return [...prevData, newSchedule];
-            }
-        });
-
-        setCurrentPage(1);
-    };
 
     return (
         <AdminLayout>
             <div className="space-y-8">
-                <h1 className="mb-6 text-3xl font-bold text-gray-800">Jadwal Admin</h1>
 
                 <div className="rounded-lg bg-white p-6 shadow-md">
                     <h2 className="mb-4 text-xl font-semibold text-gray-700">Daftar Jadwal Maintenance</h2>
