@@ -35,6 +35,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('aset');
     })->name('aset_view');
 
+    Route::get('/aset-add', function () {
+        return Inertia::render('TambahAssetPage');
+    })->name('aset-add');
+
+    Route::get('/aset/{id}/edit', fn() => Inertia::render('EditAssetPage'))
+        ->name('aset-edit');
 });
 
 
